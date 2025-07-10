@@ -1,44 +1,44 @@
 "use client";
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { fetchNotes, deleteNote } from "@/lib/api";
-import { useState } from "react";
-import { NotesResponse } from "@/types/note";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { fetchNotes } from "@/lib/api";
+import { useState, useEffect } from "react";
+import type { Note } from "@/types/note";
 import SearchBox from "@/components/SearchBox/SearchBox";
 import NoteList from "@/components/NoteList/NoteList";
 import Pagination from "@/components/Pagination/Pagination";
 import NoteModal from "@/components/NoteModal/NoteModal";
 
 interface Props {
-  initialData: NotesResponse;
+  initialData: {
+    notes: Note[];
+    totalPages: number;
+  };
 }
 
 export default function NotesClient({ initialData }: Props) {
   const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [page, setPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const queryClient = useQueryClient();
 
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["notes", { search, page }],
-    queryFn: () => fetchNotes({ search, page }),
-    initialData,
-  });
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [search]);
 
-  const mutation = useMutation({
-    mutationFn: (id: number) => deleteNote(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["notes"] });
-    },
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["notes", debouncedSearch, page],
+    queryFn: () => fetchNotes({ search: debouncedSearch, page }),
+    initialData,
   });
 
   const handleSearchChange = (value: string) => {
     setSearch(value);
     setPage(1);
-  };
-
-  const handleDelete = (id: number) => {
-    mutation.mutate(id);
   };
 
   const handleModalClose = () => setIsModalOpen(false);
@@ -66,7 +66,7 @@ export default function NotesClient({ initialData }: Props) {
       {isError && <p>Error fetching notes</p>}
 
       {data?.notes.length ? (
-        <NoteList notes={data.notes} onDelete={handleDelete} />
+        <NoteList notes={data.notes} />
       ) : (
         <p>No notes found</p>
       )}

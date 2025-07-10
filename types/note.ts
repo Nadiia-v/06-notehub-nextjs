@@ -1,18 +1,16 @@
+export type Tag = "Todo" | "Work" | "Personal" | "Meeting" | "Shopping";
+
 export interface Note {
   id: number;
   title: string;
   content: string;
-  tag: "Todo" | "Work" | "Personal" | "Meeting" | "Shopping";
+  tag: Tag;
   createdAt: string;
-}
-
-export interface NotesResponse {
-  notes: Note[];
-  totalPages: number;
+  updatedAt: string;
 }
 
 export interface NoteLoad {
   title: string;
   content: string;
-  tag: string;
+  tag: Tag;
 }

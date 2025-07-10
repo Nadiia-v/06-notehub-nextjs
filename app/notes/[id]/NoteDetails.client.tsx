@@ -6,11 +6,13 @@ import { fetchNoteById } from "@/lib/api";
 import { Note } from "@/types/note";
 import css from "./NoteDetails.module.css";
 
+interface NoteDetailsClientProps {
+  initialNote: Note;
+}
+
 export default function NoteDetailsClient({
   initialNote,
-}: {
-  initialNote: Note;
-}) {
+}: NoteDetailsClientProps) {
   const params = useParams();
   const id = Number(params.id);
 
@@ -18,6 +20,7 @@ export default function NoteDetailsClient({
     queryKey: ["note", id],
     queryFn: () => fetchNoteById(id),
     initialData: initialNote,
+    refetchOnMount: false,
   });
 
   if (isLoading) return <p>Loading, please wait...</p>;
@@ -29,8 +32,8 @@ export default function NoteDetailsClient({
         <div className={css.header}>
           <h2 className={css.h2}>{data.title}</h2>
         </div>
-        <p className={css.content}>{data.content}</p>
-        <p className={css.date}>{data.createdAt}</p>
+        <div className={css.content}>{data.content}</div>
+        <div className={css.date}>{data.createdAt}</div>
       </div>
     </div>
   );

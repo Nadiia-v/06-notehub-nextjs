@@ -1,5 +1,4 @@
 import css from "./Footer.module.css";
-import Link from "next/link";
 
 export default function Footer() {
   return (
@@ -11,7 +10,7 @@ export default function Footer() {
           <p>Developer: your name</p>
           <p>
             Contact us:
-            <Link href="<mailto:student@notehub.app>">student@notehub.app</Link>
+            <a href="mailto:student@notehub.app">student@notehub.app</a>
           </p>
         </div>
       </div>{" "}

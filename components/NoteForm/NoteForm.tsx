@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createNote } from "@/lib/api";
 import css from "./NoteForm.module.css";
 import { toast } from "react-hot-toast";
-
+import { Tag } from "@/types/note";
 interface NoteFormProps {
   onSuccess: () => void;
   onClose: () => void;
@@ -42,7 +42,7 @@ const NoteForm = ({ onSuccess, onClose }: NoteFormProps) => {
       initialValues={{ title: "", content: "", tag: "Todo" }}
       validationSchema={validationSchema}
       onSubmit={(values, { resetForm }) => {
-        mutation.mutate(values);
+        mutation.mutate({ ...values, tag: values.tag as Tag });
         resetForm();
       }}
     >
