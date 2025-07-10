@@ -1,14 +1,14 @@
 import NoteDetailsClient from "./NoteDetails.client";
 import { fetchNoteById } from "@/lib/api";
 
-interface PageProps {
+type NotePageProps = {
   params: {
     id: string;
   };
-}
+};
 
-export default async function NoteDetailsPage({ params }: PageProps) {
+export default async function NoteDetailsPage({ params }: NotePageProps) {
   const id = Number(params.id);
-  const initialNote = await fetchNoteById(id);
-  return <NoteDetailsClient initialNote={initialNote} />;
+  const note = await fetchNoteById(id);
+  return <NoteDetailsClient initialNote={note} />;
 }
