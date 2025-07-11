@@ -1,6 +1,10 @@
 "use client";
 
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useQuery,
+  keepPreviousData,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { fetchNotes } from "@/lib/api";
 import { useState, useEffect } from "react";
 import type { Note } from "@/types/note";
@@ -34,6 +38,7 @@ export default function NotesClient({ initialData }: Props) {
     queryKey: ["notes", debouncedSearch, page],
     queryFn: () => fetchNotes({ search: debouncedSearch, page }),
     initialData,
+    placeholderData: keepPreviousData,
   });
 
   const handleSearchChange = (value: string) => {

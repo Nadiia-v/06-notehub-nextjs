@@ -9,7 +9,7 @@ export interface Note {
   updatedAt: string;
 }
 
-export interface NoteLoad {
+export interface NoteFormData {
   title: string;
   content: string;
   tag: Tag;
