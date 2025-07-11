@@ -12,6 +12,7 @@ import SearchBox from "@/components/SearchBox/SearchBox";
 import NoteList from "@/components/NoteList/NoteList";
 import Pagination from "@/components/Pagination/Pagination";
 import NoteModal from "@/components/NoteModal/NoteModal";
+import css from "./Page.module.css";
 
 interface Props {
   initialData: {
@@ -46,17 +47,18 @@ export default function NotesClient({ initialData }: Props) {
     setPage(1);
   };
 
-  const handleModalClose = () => setIsModalOpen(false);
-  const handleModalSuccess = () => {
+  const handleModalClose = () => {
     setIsModalOpen(false);
     queryClient.invalidateQueries({ queryKey: ["notes"] });
   };
 
   return (
-    <div>
-      <header>
-        <SearchBox search={search} setSearch={handleSearchChange} />
-        <button onClick={() => setIsModalOpen(true)}>Create note</button>
+    <div className={css.app}>
+      <header className={css.toolbar}>
+        <SearchBox onSearchChange={handleSearchChange} />
+        <button className={css.button} onClick={() => setIsModalOpen(true)}>
+          Create note
+        </button>
       </header>
 
       {data?.totalPages > 1 && (
@@ -76,9 +78,7 @@ export default function NotesClient({ initialData }: Props) {
         <p>No notes found</p>
       )}
 
-      {isModalOpen && (
-        <NoteModal onClose={handleModalClose} onSuccess={handleModalSuccess} />
-      )}
+      {isModalOpen && <NoteModal onClose={handleModalClose} />}
     </div>
   );
 }

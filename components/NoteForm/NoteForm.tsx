@@ -5,6 +5,7 @@ import { createNote } from "@/lib/api";
 import css from "./NoteForm.module.css";
 import { toast } from "react-hot-toast";
 import { Tag } from "@/types/note";
+
 interface NoteFormProps {
   onSuccess: () => void;
   onClose: () => void;

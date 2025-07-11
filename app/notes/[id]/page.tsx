@@ -12,17 +12,17 @@ interface PageParams {
 }
 
 export default async function NoteDetailsPage({ params }: PageParams) {
-  const { id: paramsData } = await params;
-  const id = Number(paramsData);
+  const { id } = await params;
+  const noteId = Number(id);
   const queryClient = new QueryClient();
 
-  await queryClient.prefetchQuery({
-    queryKey: ["note", id],
-    queryFn: () => fetchNoteById(id),
+  await queryClient.prefetchQuery<Note>({
+    queryKey: ["note", noteId],
+    queryFn: () => fetchNoteById(noteId),
   });
 
-  const note = queryClient.getQueryData<Note>(["note", id]);
-  if (!note) return <div>Note not found</div>;
+  const note = queryClient.getQueryData<Note>(["note", noteId]);
+  if (!note) return null;
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

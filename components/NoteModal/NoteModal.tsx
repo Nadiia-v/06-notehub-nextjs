@@ -2,13 +2,14 @@ import { createPortal } from "react-dom";
 import { useEffect } from "react";
 import NoteForm from "../NoteForm/NoteForm";
 import css from "./NoteModal.module.css";
+import { toast } from "react-hot-toast";
 
 interface NoteModalProps {
   onClose: () => void;
-  onSuccess: () => void;
+  onSuccess?: () => void;
 }
 
-const NoteModal = ({ onClose, onSuccess }: NoteModalProps) => {
+const NoteModal = ({ onClose }: NoteModalProps) => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -39,7 +40,13 @@ const NoteModal = ({ onClose, onSuccess }: NoteModalProps) => {
       aria-modal="true"
     >
       <div className={css.modal} onClick={handleModalClick}>
-        <NoteForm onSuccess={onSuccess} onClose={onClose} />
+        <NoteForm
+          onSuccess={() => {
+            toast.success("Note created");
+            onClose();
+          }}
+          onClose={onClose}
+        />
       </div>
     </div>,
     document.body
